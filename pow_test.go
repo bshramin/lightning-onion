@@ -2,6 +2,7 @@ package sphinx
 
 import (
 	"math/big"
+	"sync"
 	"testing"
 
 	"github.com/btcsuite/btcd/btcec/v2"
@@ -12,14 +13,38 @@ var powThreshold *big.Int
 
 func TestPowGeneration(t *testing.T) {
 	t.Parallel()
-	threshold := []byte{31, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // Three leading zeros
-	powThreshold = new(big.Int).SetBytes(threshold)
-	for pathLength := 1; pathLength < 11; pathLength++ {
-		pathPublicKeys := createPathPublicKeys(t, pathLength)
-		t.Logf("starting path length: %d", pathLength)
-		tries := generatePOWForPathLength(t, pathPublicKeys)
-		t.Logf("path length: %d, tries: %d", pathLength, tries)
+	threshold1 := []byte{31, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // Three leading zeros
+	threshold2 := []byte{15, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // Four leading zeros
+	threshold3 := []byte{7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}  // Five leading zeros
+	thresholds := [][]byte{threshold1, threshold2, threshold3}
+	numOfRuns := 5
+	wg := &sync.WaitGroup{}
+
+	for thresholdIndex, threshold := range thresholds {
+		wg.Add(1)
+		go runForThreshold(t, wg, thresholdIndex, threshold, numOfRuns)
 	}
+	wg.Wait()
+}
+
+func runForThreshold(t *testing.T, wg *sync.WaitGroup, thresholdIndex int, threshold []byte, numOfRuns int) {
+	defer wg.Done()
+	powThreshold = new(big.Int).SetBytes(threshold)
+	for pathLength := 1; pathLength < 10; pathLength++ {
+		wg.Add(1)
+		go runForPathLength(t, wg, thresholdIndex, pathLength, numOfRuns)
+	}
+}
+
+func runForPathLength(t *testing.T, wg *sync.WaitGroup, thresholdIndex int, pathLength int, numOfRuns int) {
+	defer wg.Done()
+	totalTries := 0
+	for i := 0; i < numOfRuns; i++ {
+		pathPublicKeys := createPathPublicKeys(t, pathLength)
+		totalTries += generatePOWForPathLength(t, pathPublicKeys)
+	}
+	tries := totalTries / numOfRuns
+	t.Logf("threshold: %d, path length: %d, tries: %d", thresholdIndex, pathLength, tries)
 }
 
 func generatePOWForPathLength(t *testing.T, pathPublicKeys []*secp256k1.PublicKey) int {
