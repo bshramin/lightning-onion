@@ -12,10 +12,10 @@ import (
 
 func TestPowGeneration(t *testing.T) {
 	t.Parallel()
-	threshold1 := []byte{31, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // Three leading zeros
-	threshold2 := []byte{15, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} // Four leading zeros
-	threshold3 := []byte{7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}  // Five leading zeros
-	thresholds := [][]byte{threshold1, threshold2, threshold3}
+	threshold1 := []byte{31, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255} // Three leading zeros
+	threshold2 := []byte{15, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255} // Four leading zeros
+	threshold3 := []byte{7, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255}  // Five leading zeros
+	thresholds := [][]byte{threshold255, threshold2, threshold3}
 	numOfRuns := 5
 	wg := &sync.WaitGroup{}
 
