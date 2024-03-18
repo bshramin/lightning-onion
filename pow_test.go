@@ -16,7 +16,7 @@ func TestPowGeneration(t *testing.T) {
 	threshold2 := []byte{15, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255} // Four leading zeros
 	threshold3 := []byte{7, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255}  // Five leading zeros
 	thresholds := [][]byte{threshold255, threshold2, threshold3}
-	numOfRuns := 5
+	numOfRuns := 10
 	wg := &sync.WaitGroup{}
 
 	for thresholdIndex, threshold := range thresholds {
