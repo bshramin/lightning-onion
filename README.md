@@ -1,3 +1,11 @@
+# To run the PoW test
+```
+go test -timeout 6000000000s -v -run ^TestPowGeneration$ github.cithub.com/lightningnetwork/lightning-onion
+```
+
+
+
+
 # lightning-onion
 This repository houses an implementation of the [Lightning
 Network's](lightning.network) onion routing protocol. The Lightning Network
