@@ -1,6 +1,6 @@
 # To run the PoW test
 ```
-go test -timeout 6000000000s -v -run ^TestPowGeneration$ github.cithub.com/lightningnetwork/lightning-onion
+ go test -timeout 6000000000s -v -run ^TestPowGeneration$ github.com/bshramin/lightning-onion
 ```
 
 
